@@ -6,10 +6,13 @@ export default {
     ],
     theme: {
         extend: {
-          colors: {
-            primary: '#08FE90',
-            secondary: '#828282',
-          }
+            colors: {
+                primary: '#08FE90',
+                secondary: '#828282',
+            },
+            backgroundImage: {
+                'gradient': 'linear-gradient(to right, #1884FF, #49CDFF)',
+            },
         },
     },
     plugins: [],
