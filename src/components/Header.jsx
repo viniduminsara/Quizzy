@@ -34,7 +34,7 @@ const Header = () => {
 
                 {/* Links for small screens (below logo) */}
                 <div
-                    className={`flex-col md:hidden space-y-2 mt-4 ${isOpen ? 'flex' : 'hidden'}`}
+                    className={`flex-col md:hidden space-y-4 mt-4 ${isOpen ? 'flex' : 'hidden'}`}
                 >
                     <a href="#" className="text-secondary">Home</a>
                     <a href="#" className="text-secondary">About</a>
