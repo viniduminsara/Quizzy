@@ -5,14 +5,15 @@ import Footer from "../components/Footer.jsx";
 const RootLayout = () => {
 
     return (
-        <>
-            <Header/>
-            <main>
-                <Outlet/>
+        <div className='flex flex-col min-h-screen'>
+            <Header />
+            <main className='flex-grow'>
+                <Outlet />
             </main>
-            <Footer/>
-        </>
-    )
+            <Footer />
+        </div>
+    );
 }
 
 export default RootLayout;
+

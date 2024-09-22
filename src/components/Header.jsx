@@ -2,6 +2,7 @@ import {useState} from "react";
 import {RiMenu3Line} from "react-icons/ri";
 import {FaXmark} from "react-icons/fa6";
 import Logo from  "../assets/Logo.png"
+import {NavLink} from "react-router-dom";
 
 const Header = () => {
 
@@ -26,9 +27,8 @@ const Header = () => {
 
                     {/* Links for large screens (right-aligned) */}
                     <div className="hidden md:flex md:space-x-12">
-                        <a href="#" className="text-secondary">Home</a>
-                        <a href="#" className="text-secondary">About</a>
-                        <a href="#" className="text-secondary">Contact</a>
+                        <NavLink to='/' className="text-secondary">Home</NavLink>
+                        <NavLink to='/quizzes' className="text-secondary">Quizzes</NavLink>
                     </div>
                 </div>
 
@@ -36,9 +36,8 @@ const Header = () => {
                 <div
                     className={`flex-col md:hidden space-y-4 mt-4 ${isOpen ? 'flex' : 'hidden'}`}
                 >
-                    <a href="#" className="text-secondary">Home</a>
-                    <a href="#" className="text-secondary">About</a>
-                    <a href="#" className="text-secondary">Contact</a>
+                    <NavLink to='/' className="text-secondary">Home</NavLink>
+                    <NavLink to='/quizzes' className="text-secondary">Quizzes</NavLink>
                 </div>
             </div>
         </nav>
