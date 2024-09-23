@@ -9,7 +9,7 @@ export default {
             colors: {
                 primary: '#08FE90',
                 secondary: '#828282',
-                blue: '#49CDFF',
+                accent: '#49CDFF',
             },
             backgroundImage: {
                 'gradient': 'linear-gradient(to right, #1884FF, #49CDFF)',
