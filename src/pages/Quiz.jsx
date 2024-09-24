@@ -1,15 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { quizData } from "../../quizData.js";
 import QuizQuestion from "../components/QuizQuestion.jsx";
 import AnswerOption from "../components/AnswerOption.jsx";
 import QuizNavigationButton from "../components/QuizNavigationButton.jsx";
-import {VscDebugRestart} from "react-icons/vsc";
+import { VscDebugRestart } from "react-icons/vsc";
 
 const Quiz = () => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswers, setSelectedAnswers] = useState(Array(quizData.length).fill(null));
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
+
+    // Timer logic
+    useEffect(() => {
+        if (timeLeft > 0) {
+            const timerId = setInterval(() => {
+                setTimeLeft(timeLeft - 1);
+            }, 1000);
+            return () => clearInterval(timerId); // Cleanup on unmount
+        } else {
+            handleSubmit(); // Auto submit when time runs out
+        }
+    }, [timeLeft]);
 
     const handleAnswerSelect = (index) => {
         const updatedAnswers = [...selectedAnswers];
@@ -39,6 +52,14 @@ const Quiz = () => {
         setCurrentQuestionIndex(0);
         setSelectedAnswers(Array(quizData.length).fill(null));
         setScore(0);
+        setTimeLeft(10 * 60); // Reset timer to 10 minutes
+    };
+
+    // Convert timeLeft in seconds to minutes and seconds
+    const formatTime = (seconds) => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     };
 
     if (showResults) {
@@ -71,7 +92,7 @@ const Quiz = () => {
                     onClick={restartQuiz}
                     className='bg-gradient flex justify-around items-center space-x-1 text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200 mb-6'
                 >
-                    <VscDebugRestart color='white' size={20}/>
+                    <VscDebugRestart color='white' size={20} />
                     <div className='poppins-regular'>Restart Quiz</div>
                 </div>
             </div>
@@ -80,7 +101,8 @@ const Quiz = () => {
 
     return (
         <div className='flex flex-col justify-between px-4'>
-            <div className='flex justify-end my-3'>
+            <div className='flex justify-between items-center my-3'>
+                <div className='text-sm font-semibold'>{`Time Left: ${formatTime(timeLeft)}`}</div>
                 <button
                     onClick={handleSubmit}
                     className='bg-gradient text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'
@@ -89,7 +111,7 @@ const Quiz = () => {
                 </button>
             </div>
             <div className='flex flex-col justify-center items-center'>
-                <QuizQuestion question={quizData[currentQuestionIndex].question} questionNumber={currentQuestionIndex} />
+            <QuizQuestion question={quizData[currentQuestionIndex].question} questionNumber={currentQuestionIndex} />
                 <div className='flex flex-col justify-center items-center mb-12'>
                     {quizData[currentQuestionIndex].options.map((option, index) => (
                         <AnswerOption
