@@ -8,7 +8,7 @@ const QuizCard = ({ quizId, number, title, description }) => {
             <h3 className='bg-gradient bg-clip-text text-transparent poppins-extrabold text-5xl w-fit mt-16'>
                 {number < 10 ? `0${number}` : number}
             </h3>
-            <h3 className='text-secondary poppins-semibold text-2xl mb-2'>{title}</h3>
+            <h3 className='text-secondary poppins-semibold text-2xl mb-2'>{title.length >= 15 ? title.slice(0, 15) + '..' : title}</h3>
             <p className='text-sm poppins-extralight mb-4'>{description}</p>
             <Link
                 to={`/quiz/${quizId}`}

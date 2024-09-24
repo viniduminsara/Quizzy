@@ -1,6 +1,11 @@
 import QuizCard from "../components/QuizCard.jsx";
+import {collection, getDocs} from "firebase/firestore";
+import {db} from "../utils/firebase.js";
+import {useLoaderData} from "react-router-dom";
 
 const Quizzes = () => {
+
+    const quizzes = useLoaderData();
 
     return (
         <>
@@ -8,33 +13,30 @@ const Quizzes = () => {
                 Select a quiz to<br/> begin your <span className='text-primary'>learning</span> journey
             </h1>
             <div className='flex flex-wrap justify-center'>
-                <QuizCard
-                    quizId='q0001'
-                    number={1}
-                    title='React Basics'
-                    description='This quiz is about basics you need to know when using React. such as state, props etc.'
-                />
-                <QuizCard
-                    quizId='q0001'
-                    number={2}
-                    title='React Basics'
-                    description='This quiz is about basics you need to know when using React. such as state, props etc.'
-                />
-                <QuizCard
-                    quizId='q0001'
-                    number={3}
-                    title='React Basics'
-                    description='This quiz is about basics you need to know when using React. such as state, props etc.'
-                />
-                <QuizCard
-                    quizId='q0001'
-                    number={4}
-                    title='React Basics'
-                    description='This quiz is about basics you need to know when using React. such as state, props etc.'
-                />
+                {quizzes.map((quiz, index) => (
+                    <QuizCard
+                        key={index}
+                        quizId={quiz.id}
+                        number={index + 1}
+                        title={quiz.name}
+                        description='This quiz is about basics you need to know when using React. such as state, props etc.'
+                    />
+                ))}
             </div>
         </>
     )
 }
 
 export default Quizzes;
+
+export const loader = async () => {
+    const querySnapshot = await getDocs(collection(db, "quiz"));
+
+    const quizData = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+    }));
+
+    return quizData;
+};
+

@@ -1,22 +1,23 @@
-import {BrowserRouter, createBrowserRouter, Route, Routes} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import RootLayout from "./layouts/RootLayout.jsx";
 import Home from "./pages/Home.jsx";
-import Quizzes from "./pages/Quizzes.jsx";
+import Quizzes, { loader as quizzesLoader } from "./pages/Quizzes.jsx";
 import Quiz from "./pages/Quiz.jsx";
 
-function App() {
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <RootLayout />,
+        children: [
+            { index: true, element: <Home /> },
+            { path: 'quizzes', element: <Quizzes />, loader: quizzesLoader },
+            { path: 'quiz/:quizId', element: <Quiz /> }
+        ]
+    }
+]);
 
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<RootLayout/>}>
-                    <Route index={true} element={<Home/>}/>
-                    <Route path='quizzes' element={<Quizzes/>}/>
-                    <Route path='quiz/:quizId' element={<Quiz/>}/>
-                </Route>
-            </Routes>
-        </BrowserRouter>
-    )
+function App() {
+    return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
