@@ -5,11 +5,13 @@ import Quizzes, { loader as quizzesLoader } from "./pages/Quizzes.jsx";
 import Quiz, { loader as quizLoader } from "./pages/Quiz.jsx";
 import {Provider} from "react-redux";
 import store from "./store/index.js";
+import Error from "./pages/Error.jsx";
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <RootLayout />,
+        errorElement: <Error/>,
         children: [
             { index: true, element: <Home /> },
             { path: 'quizzes', element: <Quizzes />, loader: quizzesLoader },
