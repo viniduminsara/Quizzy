@@ -1,9 +1,18 @@
 import {VscDebugRestart} from "react-icons/vsc";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {quizActions} from "../store/quiz.js";
+import {useNavigate} from "react-router-dom";
 
 const QuizResult = ({ quiz, score, restartQuiz }) => {
 
+    const dispatch = useDispatch();
     const {selectedAnswers} = useSelector(state => state.quiz);
+    const navigate = useNavigate();
+
+    const handleBackBtn = () => {
+        dispatch(quizActions.completeQuiz());
+        navigate('/quizzes');
+    }
 
     return (
         <div className='flex flex-col justify-center items-center px-4'>
@@ -32,12 +41,21 @@ const QuizResult = ({ quiz, score, restartQuiz }) => {
                     )
                 })}
             </div>
-            <div
-                onClick={restartQuiz}
-                className='bg-gradient flex justify-around items-center space-x-1 text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200 mb-6'>
-                <VscDebugRestart color='white' size={20}/>
-                <div className='poppins-regular'>Restart Quiz</div>
+            <div className='flex space-x-2 mb-6'>
+                <div
+                    onClick={restartQuiz}
+                    className='bg-gradient flex justify-around items-center space-x-1 text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'>
+                    <VscDebugRestart color='white' size={20}/>
+                    <div className='poppins-regular'>Restart Quiz</div>
+                </div>
+
+                <button
+                    onClick={handleBackBtn}
+                    className='bg-secondary text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'>
+                    <div className='poppins-regular'>Back to Quizzes</div>
+                </button>
             </div>
+
         </div>
     )
 
