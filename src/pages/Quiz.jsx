@@ -8,6 +8,7 @@ import {useLoaderData} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {quizActions} from "../store/quiz.js";
 import QuizResult from "../components/QuizResult.jsx";
+import Timer from "../components/Timer.jsx";
 
 const Quiz = () => {
     const quiz = useLoaderData();
@@ -15,22 +16,12 @@ const Quiz = () => {
     const {currentQuestionIndex, selectedAnswers} = useSelector((state) => state.quiz);
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(10 * 60);
+
+    console.log('quiz component rendered')
 
     useEffect(() => {
         dispatch(quizActions.setQuizData(quiz));
     }, [dispatch, quiz]);
-
-    useEffect(() => {
-        if (timeLeft > 0) {
-            const timerId = setInterval(() => {
-                setTimeLeft(timeLeft - 1);
-            }, 1000);
-            return () => clearInterval(timerId);
-        } else {
-            handleSubmit();
-        }
-    }, [timeLeft]);
 
 
     useEffect(() => {
@@ -73,14 +64,7 @@ const Quiz = () => {
     const restartQuiz = () => {
         setShowResults(false);
         setScore(0);
-        setTimeLeft(10 * 60);
         dispatch(quizActions.restartQuiz());
-    };
-
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = seconds % 60;
-        return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
     };
 
     if (showResults) {
@@ -90,7 +74,7 @@ const Quiz = () => {
     return (
         <div className='flex flex-col justify-between px-4'>
             <div className='flex justify-between items-center my-3'>
-                <div className='text-sm font-semibold'>{`Time Left: ${formatTime(timeLeft)}`}</div>
+                <Timer onTimeUp={handleSubmit}/>
                 <button
                     onClick={handleSubmit}
                     className='bg-gradient text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'>
