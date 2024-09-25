@@ -1,11 +1,27 @@
 import QuizCard from "../components/QuizCard.jsx";
-import {collection, getDocs} from "firebase/firestore";
-import {db} from "../utils/firebase.js";
-import {useLoaderData} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {quizService} from "../service/quizService.js";
+import Loading from "../components/Loading.jsx";
 
 const Quizzes = () => {
 
-    const quizzes = useLoaderData();
+    const [quizzes, setQuizzes] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchQuizzes = async () => {
+            const quizzes = await quizService.getAllQuizzes();
+            if (quizzes !== null){
+                setQuizzes(quizzes);
+                setLoading(false);
+            }
+        }
+        fetchQuizzes();
+    }, []);
+
+    if (loading) {
+        return <Loading/>
+    }
 
     return (
         <>
@@ -28,15 +44,4 @@ const Quizzes = () => {
 }
 
 export default Quizzes;
-
-export const loader = async () => {
-    const querySnapshot = await getDocs(collection(db, "quiz"));
-
-    const quizData = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data()
-    }));
-
-    return quizData;
-};
 

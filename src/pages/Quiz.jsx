@@ -2,26 +2,34 @@ import {useEffect, useState} from "react";
 import QuizQuestion from "../components/QuizQuestion.jsx";
 import AnswerOption from "../components/AnswerOption.jsx";
 import QuizNavigationButton from "../components/QuizNavigationButton.jsx";
-import {doc, getDoc} from "firebase/firestore";
-import {db} from "../utils/firebase.js";
-import {useLoaderData} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {quizActions} from "../store/quiz.js";
 import QuizResult from "../components/QuizResult.jsx";
 import Timer from "../components/Timer.jsx";
+import {quizService} from "../service/quizService.js";
+import Loading from "../components/Loading.jsx";
 
 const Quiz = () => {
-    const quiz = useLoaderData();
+    const { quizId } = useParams();
     const dispatch = useDispatch();
+    const [quiz, setQuiz] = useState({});
+    const [loading, setLoading] = useState(true);
     const {currentQuestionIndex, selectedAnswers} = useSelector((state) => state.quiz);
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
 
-    console.log('quiz component rendered')
-
     useEffect(() => {
-        dispatch(quizActions.setQuizData(quiz));
-    }, [dispatch, quiz]);
+        const fetchQuizData = async () => {
+            const quizData = await quizService.getQuizById(quizId);
+            if (quizData !== null){
+                setQuiz(quizData);
+                dispatch(quizActions.setQuizData(quizData));
+                setLoading(false);
+            }
+        }
+        fetchQuizData();
+    }, [quizId]);
 
 
     useEffect(() => {
@@ -67,6 +75,10 @@ const Quiz = () => {
         dispatch(quizActions.restartQuiz());
     };
 
+    if (loading) {
+        return <Loading/>
+    }
+
     if (showResults) {
         return <QuizResult quiz={quiz} restartQuiz={restartQuiz} score={score}/>
     }
@@ -109,14 +121,3 @@ const Quiz = () => {
 };
 
 export default Quiz;
-
-export const loader = async ({ params }) => {
-    const docRef = doc(db, "quiz", params.quizId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-        return {id: docSnap.id, ...docSnap.data()};
-    } else {
-        throw new Error("Quiz not found");
-    }
-}
