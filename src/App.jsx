@@ -3,6 +3,8 @@ import RootLayout from "./layouts/RootLayout.jsx";
 import Home from "./pages/Home.jsx";
 import Quizzes, { loader as quizzesLoader } from "./pages/Quizzes.jsx";
 import Quiz, { loader as quizLoader } from "./pages/Quiz.jsx";
+import {Provider} from "react-redux";
+import store from "./store/index.js";
 
 const router = createBrowserRouter([
     {
@@ -17,7 +19,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-    return <RouterProvider router={router} />;
+    return (
+        <Provider store={store}>
+            <RouterProvider router={router} />
+        </Provider>
+    )
 }
 
 export default App;

@@ -1,4 +1,8 @@
-const AnswerOption = ({ currentQuestionIndex, selectedAnswers, handleAnswerSelect, option, index }) => {
+import {useSelector} from "react-redux";
+
+const AnswerOption = ({handleAnswerSelect, option, index }) => {
+
+    const {currentQuestionIndex, selectedAnswers} = useSelector(state => state.quiz);
 
     const isSelected = selectedAnswers[currentQuestionIndex] === index;
 
