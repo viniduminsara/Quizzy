@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
-import { quizData } from "../../quizData.js";
+import {useEffect, useState} from "react";
 import QuizQuestion from "../components/QuizQuestion.jsx";
 import AnswerOption from "../components/AnswerOption.jsx";
 import QuizNavigationButton from "../components/QuizNavigationButton.jsx";
-import { VscDebugRestart } from "react-icons/vsc";
+import {VscDebugRestart} from "react-icons/vsc";
+import {doc, getDoc} from "firebase/firestore";
+import {db} from "../utils/firebase.js";
+import {useLoaderData} from "react-router-dom";
 
 const Quiz = () => {
+    const quiz = useLoaderData();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [selectedAnswers, setSelectedAnswers] = useState(Array(quizData.length).fill(null));
+    const [selectedAnswers, setSelectedAnswers] = useState(Array(quiz.quizData.length).fill(null));
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
     const [timeLeft, setTimeLeft] = useState(10 * 60); // 10 minutes in seconds
@@ -54,7 +57,7 @@ const Quiz = () => {
         let totalScore = 0;
 
         selectedAnswers.forEach((answer, index) => {
-            if (quizData[index].options[answer] === quizData[index].correctAnswer) {
+            if (quiz.quizData[index].options[answer] === quiz.quizData[index].correctAnswer) {
                 totalScore += 1;
             }
         });
@@ -66,7 +69,7 @@ const Quiz = () => {
     const restartQuiz = () => {
         setShowResults(false);
         setCurrentQuestionIndex(0);
-        setSelectedAnswers(Array(quizData.length).fill(null));
+        setSelectedAnswers(Array(quiz.quizData.length).fill(null));
         setScore(0);
         setTimeLeft(10 * 60); // Reset timer to 10 minutes
     };
@@ -83,10 +86,10 @@ const Quiz = () => {
             <div className='flex flex-col justify-center items-center px-4'>
                 <h2 className='text-xl poppins-semibold mb-8'>You answered <span
                     className='bg-gradient bg-clip-text text-transparent'>{score}</span> out of <span
-                    className='bg-gradient bg-clip-text text-transparent'>{quizData.length}</span> questions correctly.</h2>
+                    className='bg-gradient bg-clip-text text-transparent'>{quiz.quizData.length}</span> questions correctly.</h2>
                 <div className='mb-4'>
-                    {quizData.map((question, index) => {
-                        const isCorrect = quizData[index].correctAnswer === quizData[index].options[selectedAnswers[index]];
+                    {quiz.quizData.map((question, index) => {
+                        const isCorrect = quiz.quizData[index].correctAnswer === quiz.quizData[index].options[selectedAnswers[index]];
 
                         return (
                             <div key={index} className='mb-4 flex space-x-4'>
@@ -125,9 +128,9 @@ const Quiz = () => {
                 </button>
             </div>
             <div className='flex flex-col justify-center items-center'>
-                <QuizQuestion question={quizData[currentQuestionIndex].question} questionNumber={currentQuestionIndex} />
+                <QuizQuestion question={quiz.quizData[currentQuestionIndex].question} questionNumber={currentQuestionIndex} />
                 <div className='flex flex-col justify-center items-center mb-12'>
-                    {quizData[currentQuestionIndex].options.map((option, index) => (
+                    {quiz.quizData[currentQuestionIndex].options.map((option, index) => (
                         <AnswerOption
                             key={index}
                             index={index}
@@ -141,7 +144,7 @@ const Quiz = () => {
             </div>
 
             <div className='flex flex-wrap justify-center items-center space-x-2 px-4 mb-4'>
-                {quizData.map((_, index) => (
+                {quiz.quizData.map((_, index) => (
                     <QuizNavigationButton
                         key={index}
                         index={index}
@@ -155,3 +158,16 @@ const Quiz = () => {
 };
 
 export default Quiz;
+
+export const loader = async ({ params }) => {
+    const docRef = doc(db, "quiz", params.quizId);
+    const docSnap = await getDoc(docRef);
+
+    console.log('awa')
+
+    if (docSnap.exists()) {
+        return {id: docSnap.id, ...docSnap.data()};
+    } else {
+        throw new Error("Quiz not found");
+    }
+}
