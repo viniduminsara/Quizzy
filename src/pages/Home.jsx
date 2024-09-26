@@ -4,8 +4,11 @@ import {GrSelect} from "react-icons/gr";
 import {IoBookOutline} from "react-icons/io5";
 import {TbListDetails} from "react-icons/tb";
 import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 const Home = () => {
+
+    const {isAuthenticated} = useSelector(state => state.auth);
 
     return (
         <>
@@ -20,11 +23,21 @@ const Home = () => {
                         className='p-4 text-secondary text-sm lg:text-md border-l-2 border-l-primary poppins-light mb-6 lg:mb-12'>
                         We help you prepare for exams with quizzes
                     </div>
-                    <Link
-                        to='/quizzes'
-                        className='bg-gradient w-fit py-2 px-4 text-sm lg:text-lg text-white rounded poppins-regular'>
-                        Start Solving
-                    </Link>
+                    {isAuthenticated ?
+                        <Link
+                            to='/quizzes'
+                            className='bg-gradient w-fit py-2 px-4 text-sm lg:text-lg text-white rounded poppins-regular'>
+                            Start Solving
+                        </Link>
+
+                        :
+
+                        <Link
+                            to='/login'
+                            className='bg-gradient w-fit py-2 px-4 text-sm lg:text-lg text-white rounded poppins-regular'>
+                            Get Started
+                        </Link>
+                    }
                 </div>
                 <img src={Hero} alt='hero image' className='w-96 md:w-5/12'/>
             </section>
