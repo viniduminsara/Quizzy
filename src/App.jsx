@@ -6,6 +6,8 @@ import Quiz from "./pages/Quiz.jsx";
 import {Provider} from "react-redux";
 import store from "./store/index.js";
 import Error from "./pages/Error.jsx";
+import Signup from "./pages/Signup.jsx";
+import Login from "./pages/Login.jsx";
 
 const router = createBrowserRouter([
     {
@@ -16,6 +18,8 @@ const router = createBrowserRouter([
             { index: true, element: <Home /> },
             { path: 'quizzes', element: <Quizzes /> },
             { path: 'quiz/:quizId', element: <Quiz /> },
+            { path: 'signup', element: <Signup/> },
+            { path: 'login', element: <Login/> },
         ]
     }
 ]);
