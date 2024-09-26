@@ -5,10 +5,12 @@ import StyledInput from "../components/StyledInput.jsx";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from "react-router-dom";
 
 const Signup = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,6 +38,7 @@ const Signup = () => {
                 const user = userCredential.user;
                 console.log(user);
                 toast.success('Signup successful!');
+                navigate('/');
             })
             .catch((error) => {
                 toast.error(error.message);

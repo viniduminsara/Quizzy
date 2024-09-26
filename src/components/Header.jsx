@@ -2,19 +2,35 @@ import {useState} from "react";
 import {RiMenu3Line} from "react-icons/ri";
 import {FaXmark} from "react-icons/fa6";
 import Logo from "../assets/Logo.png"
-import {NavLink} from "react-router-dom";
-import {useSelector} from "react-redux";
-import quizSlice from "../store/quiz.js";
+import {NavLink, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import { getAuth, signOut } from "firebase/auth";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {authActions} from "../store/auth.js";
 
 const Header = () => {
 
     const {isOngoingQuiz} = useSelector(state => state.quiz);
     const {isAuthenticated} = useSelector(state => state.auth);
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleDisabledClick = (e) => {
         e.preventDefault();
     };
+
+    const handleLogout = () => {
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            toast.success('Logged out successfully.');
+            dispatch(authActions.logout());
+            navigate('/');
+        }).catch((error) => {
+            toast.error(error.message);
+        });
+    }
 
     return (
         <nav className="py-4 px-8 md:px-12 lg:px-16">
@@ -40,13 +56,22 @@ const Header = () => {
                             Home
                         </NavLink>
                         {isAuthenticated ?
-                            <NavLink
-                                to="/quizzes"
-                                className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
-                                onClick={isOngoingQuiz ? handleDisabledClick : undefined}
-                            >
-                                Quizzes
-                            </NavLink>
+                            <>
+                                <NavLink
+                                    to="/quizzes"
+                                    className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
+                                    onClick={isOngoingQuiz ? handleDisabledClick : undefined}
+                                >
+                                    Quizzes
+                                </NavLink>
+                                {!isOngoingQuiz ?
+                                    <button
+                                        onClick={handleLogout}
+                                        className='text-red-400 w-fit poppins-regular border-red-400 border-2 px-2 py-1 rounded-lg'>
+                                        Logout
+                                    </button> : ''
+                                }
+                            </>
 
                             :
 
@@ -79,13 +104,22 @@ const Header = () => {
                         Home
                     </NavLink>
                     {isAuthenticated ?
-                        <NavLink
-                            to="/quizzes"
-                            className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
-                            onClick={isOngoingQuiz ? handleDisabledClick : undefined}
-                        >
-                            Quizzes
-                        </NavLink>
+                        <>
+                            <NavLink
+                                to="/quizzes"
+                                className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
+                                onClick={isOngoingQuiz ? handleDisabledClick : undefined}
+                            >
+                                Quizzes
+                            </NavLink>
+                            {!isOngoingQuiz ?
+                                <button
+                                    onClick={handleLogout}
+                                    className='text-red-400 w-fit poppins-regular border-red-400 border-2 px-2 py-1 rounded-lg'>
+                                    Logout
+                                </button> : ''
+                            }
+                        </>
 
                         :
 

@@ -5,10 +5,12 @@ import Image from "../assets/Login.png";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,6 +37,8 @@ const Login = () => {
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
+                toast.success('Login successful!');
+                navigate('/');
             })
             .catch((error) => {
                 toast.error(error.message);
