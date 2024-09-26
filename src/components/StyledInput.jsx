@@ -7,7 +7,6 @@ const StyledInput = ({ type, placeholder, value, onChangeHandler }) => {
             value={value}
             onChange={onChangeHandler}
             className='poppins-regular border border-gray-300 p-2 rounded-md'
-            required
         />
     )
 }

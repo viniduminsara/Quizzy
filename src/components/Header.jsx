@@ -8,7 +8,8 @@ import quizSlice from "../store/quiz.js";
 
 const Header = () => {
 
-    const {isOngoingQuiz} = useSelector(state => state.quiz, [quizSlice]);
+    const {isOngoingQuiz} = useSelector(state => state.quiz);
+    const {isAuthenticated} = useSelector(state => state.auth);
     const [isOpen, setIsOpen] = useState(false);
 
     const handleDisabledClick = (e) => {
@@ -30,7 +31,7 @@ const Header = () => {
                         </button>
                     </div>
 
-                    <div className="hidden md:flex md:space-x-12">
+                    <div className="hidden md:flex items-center md:space-x-6">
                         <NavLink
                             to="/"
                             className={`text-secondary ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
@@ -38,13 +39,32 @@ const Header = () => {
                         >
                             Home
                         </NavLink>
-                        <NavLink
-                            to="/quizzes"
-                            className={`text-secondary ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
-                            onClick={isOngoingQuiz ? handleDisabledClick : undefined}
-                        >
-                            Quizzes
-                        </NavLink>
+                        {isAuthenticated ?
+                            <NavLink
+                                to="/quizzes"
+                                className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
+                                onClick={isOngoingQuiz ? handleDisabledClick : undefined}
+                            >
+                                Quizzes
+                            </NavLink>
+
+                            :
+
+                            <>
+                                <NavLink
+                                    to='/login'
+                                    className='text-primary poppins-regular border-primary border-2 px-2 py-1 rounded-lg'
+                                >
+                                    Login
+                                </NavLink>
+                                <NavLink
+                                    to='/signup'
+                                    className='text-accent poppins-regular border-accent border-2 px-2 py-1 rounded-lg'
+                                >
+                                    Create Account
+                                </NavLink>
+                            </>
+                        }
                     </div>
                 </div>
 
@@ -53,18 +73,37 @@ const Header = () => {
                 >
                     <NavLink
                         to="/"
-                        className={`text-secondary ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
+                        className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
                         onClick={isOngoingQuiz ? handleDisabledClick : undefined}
                     >
                         Home
                     </NavLink>
-                    <NavLink
-                        to="/quizzes"
-                        className={`text-secondary ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
-                        onClick={isOngoingQuiz ? handleDisabledClick : undefined}
-                    >
-                        Quizzes
-                    </NavLink>
+                    {isAuthenticated ?
+                        <NavLink
+                            to="/quizzes"
+                            className={`text-secondary poppins-regular ${isOngoingQuiz ? 'opacity-50 pointer-events-none' : ''}`}
+                            onClick={isOngoingQuiz ? handleDisabledClick : undefined}
+                        >
+                            Quizzes
+                        </NavLink>
+
+                        :
+
+                        <>
+                            <NavLink
+                                to='/login'
+                                className='text-primary w-fit poppins-regular border-primary border-2 px-2 py-1 rounded-lg'
+                            >
+                                Login
+                            </NavLink>
+                            <NavLink
+                                to='/signup'
+                                className='text-accent w-fit poppins-regular border-accent border-2 px-2 py-1 rounded-lg'
+                            >
+                                Create Account
+                            </NavLink>
+                        </>
+                    }
                 </div>
             </div>
         </nav>

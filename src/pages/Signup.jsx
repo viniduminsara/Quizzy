@@ -3,6 +3,8 @@ import Learning from "../assets/Signup.png";
 import Logo from "../assets/Logo.png";
 import StyledInput from "../components/StyledInput.jsx";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -11,15 +13,33 @@ const Signup = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+            toast.error('Email is required');
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            toast.error('Invalid email format');
+            return;
+        }
+
+        if (password.length < 6) {
+            toast.error('Password must be at least 6 characters');
+            return;
+        }
+
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(user);
+                toast.success('Signup successful!');
             })
             .catch((error) => {
-                console.log(error);
-            })
+                toast.error(error.message);
+            });
     };
 
     return (

@@ -3,6 +3,8 @@ import Logo from "../assets/Logo.png";
 import StyledInput from "../components/StyledInput.jsx";
 import Image from "../assets/Login.png";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -11,6 +13,23 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (!email) {
+            toast.error('Email is required');
+            return;
+        }
+
+        if (!emailRegex.test(email)) {
+            toast.error('Invalid email format');
+            return;
+        }
+
+        if (password.length < 6) {
+            toast.error('Password is required');
+            return;
+        }
+
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
@@ -18,8 +37,8 @@ const Login = () => {
                 console.log(user);
             })
             .catch((error) => {
-                console.log(error);
-            })
+                toast.error(error.message);
+            });
     };
 
     return (
@@ -33,7 +52,7 @@ const Login = () => {
                             <h3 className='text-2xl poppins-semibold'>Welcome Back</h3>
                         </div>
                         <StyledInput
-                            type='email'
+                            type='text'
                             placeholder='Enter your email'
                             value={email}
                             onChangeHandler={(e) => setEmail(e.target.value)}
