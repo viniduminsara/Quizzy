@@ -24,10 +24,12 @@ const quizSlice = createSlice({
         },
         restartQuiz(state) {
             state.currentQuestionIndex = 0;
-            state.selectedAnswers = [];
+            state.selectedAnswers.fill(null);
             state.isOngoingQuiz = true;
         },
         completeQuiz(state) {
+            state.currentQuestionIndex = 0;
+            state.selectedAnswers = [];
             state.isOngoingQuiz = false;
         }
     }
