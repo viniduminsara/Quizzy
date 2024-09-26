@@ -18,6 +18,7 @@ const Quiz = () => {
     const {currentQuestionIndex, selectedAnswers} = useSelector((state) => state.quiz);
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
 
     useEffect(() => {
         const fetchQuizData = async () => {
@@ -56,7 +57,8 @@ const Quiz = () => {
         dispatch(quizActions.selectQuestion({index}));
     };
 
-    const handleSubmit = () => {
+    const handleConfirmSubmit = () => {
+        setShowConfirmModal(false)
         let totalScore = 0;
 
         selectedAnswers.forEach((answer, index) => {
@@ -86,12 +88,33 @@ const Quiz = () => {
     return (
         <div className='flex flex-col justify-between px-4'>
             <div className='flex justify-between items-center my-3'>
-                <Timer onTimeUp={handleSubmit}/>
+                <Timer onTimeUp={handleConfirmSubmit}/>
                 <button
-                    onClick={handleSubmit}
+                    onClick={() => setShowConfirmModal(true)}
                     className='bg-gradient text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'>
                     Submit Answers
                 </button>
+
+                {showConfirmModal && (
+                    <div className='fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center'>
+                        <div className='bg-white rounded-lg p-4'>
+                            <h2 className='text-lg poppins-semibold mb-2'>Confirm Submission</h2>
+                            <p className='mb-4 poppins-regular'>Are you sure you want to submit your answers?</p>
+                            <div className='flex justify-end space-x-2'>
+                                <button
+                                    onClick={() => setShowConfirmModal(false)}
+                                    className='bg-gray-500 poppins-regular text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'>
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleConfirmSubmit}
+                                    className='bg-gradient poppins-regular text-white px-4 py-2 rounded-xl hover:scale-105 transition duration-200'>
+                                    Confirm
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             <div className='flex flex-col justify-center items-center'>
                 <QuizQuestion question={quiz.quizData[currentQuestionIndex].question}/>
