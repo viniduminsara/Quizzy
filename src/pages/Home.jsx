@@ -1,10 +1,8 @@
 import Hero from '../assets/hero.png'
 import HomeCard from "../components/HomeCard.jsx";
-import {GrSelect} from "react-icons/gr";
-import {IoBookOutline} from "react-icons/io5";
-import {TbListDetails} from "react-icons/tb";
 import {Link} from "react-router-dom";
 import {useSelector} from "react-redux";
+import {homeCards} from "../utils/homeCardData.js";
 
 const Home = () => {
 
@@ -47,24 +45,16 @@ const Home = () => {
                     Let{"'"}s checkout<br/> your <span className='text-primary'>learning</span> journey
                 </h2>
                 <div className="flex flex-col space-y-4 justify-center items-center md:flex-row md:space-y-0 md:space-x-4 lg:space-x-32">
-                    <HomeCard
-                        icon={<GrSelect color='#FF75B7' size={18}/>}
-                        title='Select a Quiz'
-                        description='Choose from a variety of quizzes that match your interests and test your knowledge across different subjects.'
-                        bgColor='bg-pink-100'
-                    />
-                    <HomeCard
-                        icon={<IoBookOutline color='#63A1FF' size={18}/>}
-                        title='Complete the Quiz'
-                        description='Answer each question by selecting the correct option. Take your time and do your best to complete the quiz'
-                        bgColor='bg-blue-100'
-                    />
-                    <HomeCard
-                        icon={<TbListDetails color='#2EFF9C' size={18}/>}
-                        title='View Your Score'
-                        description='Once the quiz is finished, see your results instantly. Review your performance and understand where you excelled or need improvement'
-                        bgColor='bg-green-100'
-                    />
+                    {homeCards.map((card, index) => (
+                        <HomeCard
+                            key={index}
+                            icon={card.icon}
+                            iconColor={card.iconColor}
+                            title={card.title}
+                            description={card.description}
+                            bgColor={card.bgColor}
+                        />
+                    ))}
                 </div>
             </section>
         </>

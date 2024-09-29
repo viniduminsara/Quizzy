@@ -25,17 +25,19 @@ const QuizResult = ({ quiz, score, restartQuiz }) => {
                     const isCorrect = quiz.quizData[index].correctAnswer === quiz.quizData[index].options[selectedAnswers[index]];
 
                     return (
-                        <div key={index} className='mb-4 flex space-x-4'>
+                        <div key={index} className='mb-4 flex items-start space-x-4'>
                             <div
-                                className={`w-10 h-10 ${selectedAnswers[index] !== null ? (isCorrect ? 'bg-green-300' : 'bg-red-300') : 'bg-gray-300'} flex items-center justify-center rounded-full mb-4`}>
+                                className={`w-10 h-10 flex-shrink-0 ${selectedAnswers[index] !== null ? (isCorrect ? 'bg-green-300' : 'bg-red-300') : 'bg-gray-300'} flex items-center justify-center rounded-full`}>
                                 {index + 1}
                             </div>
                             <div>
                                 <h3 className='text-xs md:text-sm poppins-semibold'>{question.question}</h3>
-                                <p className='text-gray-500 poppins-light text-xs md:text-sm'>Your
-                                    Answer: {selectedAnswers[index] !== null ? question.options[selectedAnswers[index]] : "No answer"}</p>
-                                <p className='text-green-600 poppins-light text-xs md:text-sm'>Correct
-                                    Answer: {question.correctAnswer}</p>
+                                <p className='text-gray-500 poppins-light text-xs md:text-sm'>
+                                    Your Answer: {selectedAnswers[index] !== null ? question.options[selectedAnswers[index]] : "No answer"}
+                                </p>
+                                <p className='text-green-600 poppins-light text-xs md:text-sm'>
+                                    Correct Answer: {question.correctAnswer}
+                                </p>
                             </div>
                         </div>
                     )

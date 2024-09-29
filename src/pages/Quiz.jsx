@@ -96,7 +96,7 @@ const Quiz = () => {
                 </button>
 
                 {showConfirmModal && (
-                    <div className='fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center'>
+                    <div className='fixed top-0 left-0 w-full h-full px-4 bg-gray-500 bg-opacity-50 flex justify-center items-center'>
                         <div className='bg-white rounded-lg p-4'>
                             <h2 className='text-lg poppins-semibold mb-2'>Confirm Submission</h2>
                             <p className='mb-4 poppins-regular'>Are you sure you want to submit your answers?</p>
