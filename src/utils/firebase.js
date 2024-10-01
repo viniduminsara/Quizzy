@@ -3,14 +3,14 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAyqkcxT06LC47T3vYFd5KbkYvRUkjEEqw",
-    authDomain: "quizzy-34901.firebaseapp.com",
-    projectId: "quizzy-34901",
-    storageBucket: "quizzy-34901.appspot.com",
-    messagingSenderId: "753255723318",
-    appId: "1:753255723318:web:2872d58952fe1f1838c397"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-const auth = getAuth(app);
+export const auth = getAuth(app);
