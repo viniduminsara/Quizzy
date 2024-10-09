@@ -11,7 +11,7 @@ const quizSlice = createSlice({
     initialState: initialQuizState,
     reducers: {
         setQuizData(state, action) {
-            state.selectedAnswers = Array(action.payload.quizData.length).fill(null);
+            state.selectedAnswers = Array(action.payload.questions.length).fill(null);
             state.isOngoingQuiz = true;
         },
         answerSelect(state, action) {

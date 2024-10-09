@@ -34,8 +34,8 @@ const Quizzes = () => {
                         key={index}
                         quizId={quiz.id}
                         number={index + 1}
-                        title={quiz.name}
-                        description='This quiz is about basics you need to know when using React. such as state, props etc.'
+                        title={quiz.quizName}
+                        description={quiz.description}
                     />
                 ))}
             </div>

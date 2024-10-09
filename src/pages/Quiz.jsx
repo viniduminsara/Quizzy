@@ -62,7 +62,7 @@ const Quiz = () => {
         let totalScore = 0;
 
         selectedAnswers.forEach((answer, index) => {
-            if (quiz.quizData[index].options[answer] === quiz.quizData[index].correctAnswer) {
+            if (answer === quiz.questions[index].correctAnswer) {
                 totalScore += 1;
             }
         });
@@ -117,9 +117,9 @@ const Quiz = () => {
                 )}
             </div>
             <div className='flex flex-col justify-center items-center'>
-                <QuizQuestion question={quiz.quizData[currentQuestionIndex].question}/>
+                <QuizQuestion question={quiz.questions[currentQuestionIndex].questionText}/>
                 <div className='flex flex-col justify-center items-center mb-12'>
-                    {quiz.quizData[currentQuestionIndex].options.map((option, index) => (
+                    {quiz.questions[currentQuestionIndex].answers.map((option, index) => (
                         <AnswerOption
                             key={index}
                             index={index}
@@ -131,7 +131,7 @@ const Quiz = () => {
             </div>
 
             <div className='flex flex-wrap justify-center items-center space-x-2 px-4 mb-4'>
-                {quiz.quizData.map((_, index) => (
+                {quiz.questions.map((_, index) => (
                     <QuizNavigationButton
                         key={index}
                         index={index}
