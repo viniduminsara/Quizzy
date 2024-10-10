@@ -1,4 +1,4 @@
-import {collection, doc, getDoc, getDocs} from "firebase/firestore";
+import {collection, doc, getDoc, getDocs, updateDoc, increment} from "firebase/firestore";
 import {db} from "../utils/firebase.js";
 
 const getAllQuizzes = async () => {
@@ -23,4 +23,11 @@ const getQuizById = async (quizId) => {
     }
 }
 
-export const quizService = { getAllQuizzes, getQuizById };
+const incrementQuizAttempts = async (quizId) => {
+    const docRef = doc(db, "quiz", quizId);
+    await updateDoc(docRef, {
+        attempts: increment(1)
+    });
+}
+
+export const quizService = { getAllQuizzes, getQuizById, incrementQuizAttempts };

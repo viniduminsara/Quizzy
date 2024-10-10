@@ -2,13 +2,14 @@ import {useEffect, useState} from "react";
 import QuizQuestion from "../components/QuizQuestion.jsx";
 import AnswerOption from "../components/AnswerOption.jsx";
 import QuizNavigationButton from "../components/QuizNavigationButton.jsx";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {quizActions} from "../store/quiz.js";
 import QuizResult from "../components/QuizResult.jsx";
 import Timer from "../components/Timer.jsx";
 import {quizService} from "../service/quizService.js";
 import Loading from "../components/Loading.jsx";
+import {toast} from "react-toastify";
 
 const Quiz = () => {
     const { quizId } = useParams();
@@ -19,6 +20,7 @@ const Quiz = () => {
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchQuizData = async () => {
@@ -59,16 +61,24 @@ const Quiz = () => {
 
     const handleConfirmSubmit = () => {
         setShowConfirmModal(false)
-        let totalScore = 0;
 
-        selectedAnswers.forEach((answer, index) => {
-            if (answer === quiz.questions[index].correctAnswer) {
-                totalScore += 1;
-            }
-        });
+        quizService.incrementQuizAttempts(quizId)
+            .then(() => {
+                let totalScore = 0;
 
-        setScore(totalScore);
-        setShowResults(true);
+                selectedAnswers.forEach((answer, index) => {
+                    if (answer === quiz.questions[index].correctAnswer) {
+                        totalScore += 1;
+                    }
+                });
+
+                setScore(totalScore);
+                setShowResults(true);
+            })
+            .catch(() => {
+                toast.error('Error occurred while submitting answers');
+                navigate('/quizzes');
+            })
     };
 
     const restartQuiz = () => {

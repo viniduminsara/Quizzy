@@ -36,6 +36,7 @@ const Quizzes = () => {
                         number={index + 1}
                         title={quiz.quizName}
                         description={quiz.description}
+                        imageUrl={quiz.imageUrl}
                     />
                 ))}
             </div>
